@@ -8,7 +8,8 @@
     "margin-left": 0,
     "margin-right": 0,
     "modules-left": [
-        "hyprland/workspaces"
+        "hyprland/workspaces",
+        "hyprland/submap"
     ],
     "modules-center": [],
     "modules-right": [
@@ -55,6 +56,10 @@
         "icon-size": 16,
         "sort-by-number": true,
         "show-empty": false
+    },
+    "hyprland/submap": {
+        "format": "submap: {}",
+        "tooltip": false
     },
     "cpu": {
         "interval": 10,
