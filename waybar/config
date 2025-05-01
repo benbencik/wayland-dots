@@ -68,12 +68,15 @@
     "wireplumber": {
         "format": "\udb81\udd7e  {volume}%",
         "max-volume": 100,
+        "format-muted": "🔇",
         "scroll-step": 5
     },
     "battery": {
         "bat": "BAT0",
-        "interval": 60,
+        "interval": 5,
         "format": "{icon}  {capacity}%",
+        "format-charging": "↯{icon}  {capacity}%",
+        "format-low": "☠{icon}  {capacity}%",
         "format-icons": [
             "\uf244",
             "\uf243",
