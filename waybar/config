@@ -81,14 +81,18 @@
         "interval": 5,
         "format": "{icon}  {capacity}%",
         "format-charging": "↯{icon}  {capacity}%",
-        "format-low": "☠{icon}  {capacity}%",
+        "format-critical": "🕱 {icon}  {capacity}%",
         "format-icons": [
             "\uf244",
             "\uf243",
             "\uf242",
             "\uf241",
             "\uf240"
-        ]
+        ],
+        "states": {
+            "warning": 20,
+            "critical": 10
+        }
     },
     "backlight": {
         "format": "\udb80\udcdf  {percent}%"

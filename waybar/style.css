@@ -1,6 +1,7 @@
 @define-color foreground #d3c6aa;
 @define-color foreground-inactive #7f8c8d;
 @define-color background rgba(45, 53, 59, 0.9);
+/* @define-color background rgba(80, 90, 96, 0.9); */
 @define-color background-alt rgba(80, 90, 96, 0.9);
 
 
@@ -44,4 +45,10 @@
 #language,
 #network {
     margin-right: 0.8em;
+}
+#battery.critical {
+    color: rgb(255, 98, 98);
+}
+#battery.warning {
+    color: rgb(253, 202, 108);
 }
