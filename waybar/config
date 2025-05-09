@@ -71,17 +71,23 @@
         "tooltip": false
     },
     "wireplumber": {
-        "format": "\udb81\udd7e  {volume}%",
+        "format": "{icon} {volume}%",
         "max-volume": 100,
-        "format-muted": "🔇",
-        "scroll-step": 5
+        "format-muted": "\ueee8 ",
+        "scroll-step": 5,
+        "format-icons": [
+            "\udb81\udd7f",
+            "\udb81\udd80",
+            "\udb81\udd7e"
+            
+        ]
     },
     "battery": {
         "bat": "BAT0",
         "interval": 5,
         "format": "{icon}  {capacity}%",
         "format-charging": "↯{icon}  {capacity}%",
-        "format-critical": "🕱 {icon}  {capacity}%",
+        "format-critical": "\udb82\udfc8 {icon}  {capacity}%",
         "format-icons": [
             "\uf244",
             "\uf243",
@@ -95,7 +101,12 @@
         }
     },
     "backlight": {
-        "format": "\udb80\udcdf  {percent}%"
+    "format": "{icon} {percent}%",
+    "format-icons": [
+        "\udb80\udcde",
+        "\udb80\udcdf",
+        "\udb80\udce0"
+        ]
     },
     "memory": {
         "interval": 30,
