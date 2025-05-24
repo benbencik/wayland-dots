@@ -1,0 +1,24 @@
+sort=-time
+layer=overlay
+background-color=#2d353b
+text-color=#d3c6aa
+width=300
+height=110
+border-size=2
+border-color=#a7c080
+border-radius=0
+icons=0
+ignore-timeout=1
+max-icon-size=64
+font=monospace 12
+margin=4,4,4,4
+anchor=top-right
+
+[urgency=low]
+border-color=#a7c080
+
+[urgency=normal]
+border-color=#a7c080
+
+[urgency=high]
+border-color=#e67e80
