@@ -1,0 +1,11 @@
+foreground
+background
+
+active_border_color
+inactive_active_border_color
+
+selection_foreground
+selection_background
+
+cursor
+cursor_text_color
