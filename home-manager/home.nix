@@ -5,6 +5,7 @@
   # manage.
   home.username = "benb";
   home.homeDirectory = "/home/benb";
+  home.enableNixpkgsReleaseCheck = false;
 
   # This value determines the Home Manager release that your configuration is
   # compatible with. This helps avoid breakage when a new Home Manager release
@@ -73,4 +74,63 @@
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
+
+  programs.neovim.enable = true;
+  programs.neovim.plugins = with pkgs.vimPlugins; [
+    vim-markdown
+  ];
+
+  programs.zsh = {
+    enable = true;
+    
+    # initExtra = ''$HOME/.config/home-manager/hello-duck.sh'';
+    # export PATH="$HOME/.cargo/bin:$HOME/.foundry/bin:$HOME/.nix-profile/bin:$PATH"
+    initExtra = ''
+      export PATH="$HOME/.cargo/bin:$HOME/.foundry/bin:$PATH"
+      eval "$(starship init zsh)"
+    '';
+
+    shellAliases = {
+      ll = "ls -l";
+      nix-conf = "sudo nano /etc/nixos/configuration.nix";
+      nix-update = "sudo nixos-rebuild switch";
+      nix-search = "nix search nixpkgs";
+      hm-update = "home-manager switch";
+      ws = "watson stop";
+      we = "watson edit";
+      wa = "watson aggregate | tail";
+      wr = "watson restart";
+      duck = "~/.config/home-manager/hello-duck.sh";
+    };
+
+    oh-my-zsh = {
+      enable = true;
+      theme = "robbyrussell";
+      custom = "$HOME/.oh-my-zsh/custom";
+      plugins = [ "git" "zsh-autosuggestions" "zsh-syntax-highlighting" ];
+    };
+
+    history.size = 10000;
+  };
+
+  programs.git = {
+    enable = true;
+    userName = "benbencik";
+    userEmail = "bencik42@gmail.com";
+    extraConfig = {
+      pull.rebase = true;
+      color.ui = "auto";
+    };
+  };
+
+  gtk = {
+    enable = true;
+    theme = {
+      name = "Everforest-Dark-Medium";
+    };
+  };
+
+  home.sessionVariables = {
+    GTK_THEME = "Everforest-Dark-Medium";
+  };
 }
