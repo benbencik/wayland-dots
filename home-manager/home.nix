@@ -86,7 +86,7 @@
     # initExtra = ''$HOME/.config/home-manager/hello-duck.sh'';
     # export PATH="$HOME/.cargo/bin:$HOME/.foundry/bin:$HOME/.nix-profile/bin:$PATH"
     initExtra = ''
-      export PATH="$HOME/.cargo/bin:$HOME/.foundry/bin:$PATH"
+      export PATH="$HOME/.cargo/bin:$HOME/.local/bin:$HOME/.foundry/bin:$PATH"
       eval "$(starship init zsh)"
     '';
 
