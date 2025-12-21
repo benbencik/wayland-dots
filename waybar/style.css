@@ -1,57 +1,181 @@
+/* ============================================
+   Color & Spacing Variables
+   ============================================ */
 @define-color foreground #d3c6aa;
-@define-color foreground-inactive #7f8c8d;
-@define-color background rgba(45, 53, 59, 0.9);
-/* @define-color background rgba(80, 90, 96, 0.9); */
+@define-color foreground-inactive #859289;
+@define-color background rgba(45, 53, 59, 0.95);
 @define-color background-alt rgba(80, 90, 96, 0.9);
+@define-color accent #a7c080;
+@define-color warning #dbbc7f;
+@define-color critical #e67e80;
 
-
+/* ============================================
+   Global Settings
+   ============================================ */
 * {
     font-family: Hack Nerd Font;
     font-size: 14px;
     padding: 0;
     margin: 0;
+    min-height: 0;
+    border: none;
+    border-radius: 6px;
 }
 
 #waybar {
     color: @foreground;
     background-color: @background;
+    border-top: 2px solid rgba(167, 192, 128, 0.3);
+    border-radius: 0px;
+}
+
+/* ============================================
+   Workspaces
+   ============================================ */
+#workspaces {
+    padding: 0px 4px;
+    margin: 4px 0;
 }
 
 #workspaces button {
-    padding-left: 0.5em;
-    padding-right: 0.5em;
+    padding: 0 8px;
+    margin: 1px 4px;
+    color: @foreground-inactive;
+}
+
+#workspaces button:hover {
+    background-color: rgba(167, 192, 128, 0.15);
     color: @foreground;
 }
 
 #workspaces button.active {
     background-color: @background-alt;
-    border-radius: 3px;
+    color: @accent;
+    font-weight: bold;
+    /* box-shadow: inset 0 -2px 0 @accent; */
 }
 
+#workspaces button.urgent {
+    background-color: @critical;
+    color: @background;
+}
+
+/* ============================================
+   Module Groups - Common styling for all module containers
+   ============================================ */
 #wireplumber,
 #bat,
 #tray,
 #usage,
 #clock,
-#net {
+#net,
+#submap {
     background-color: @background-alt;
-    border-radius: 3px;
-    padding-left: 0.5em;
-    padding-right: 0.5em;
-    margin-left: 0.3em;
+    padding: 0 10px;
+    margin: 6px 4px;
 }
 
+/* Hover effects for interactive groups */
+#usage:hover,
+#bat:hover,
+#net:hover,
+#wireplumber:hover {
+    background-color: rgba(167, 192, 128, 0.2);
+}
+
+/* ============================================
+   Clock - Special styling
+   ============================================ */
+#clock {
+    background: linear-gradient(135deg, @background-alt 0%, rgba(167, 192, 128, 0.15) 100%);
+    font-weight: bold;
+    color: @accent;
+    padding: 0 12px;
+    border: 1px solid rgba(167, 192, 128, 0.2);
+}
+
+/* ============================================
+   Submap - Active mode indicator
+   ============================================ */
+#submap {
+    background-color: @accent;
+    color: @background;
+    font-weight: bold;
+}
+
+/* ============================================
+   Internal Module Spacing
+   ============================================ */
 #battery,
 #memory,
 #language,
 #network {
-    margin-right: 0.8em;
+    margin-right: 8px;
+}
+
+#cpu,
+#temperature,
+#backlight {
+    margin-left: 8px;
+}
+
+/* ============================================
+   Status Indicators
+   ============================================ */
+#battery.charging {
+    color: @accent;
 }
 
 #battery.critical {
-    color: rgb(255, 98, 98);
+    color: @critical;
+    font-weight: bold;
 }
 
 #battery.warning {
-    color: rgb(253, 202, 108);
+    color: @warning;
+}
+
+#network.disconnected {
+    color: @critical;
+}
+
+#network.wifi {
+    color: @accent;
+}
+
+#bluetooth.connected {
+    color: @accent;
+}
+
+#bluetooth.disabled {
+    color: @foreground-inactive;
+}
+
+#temperature.critical {
+    color: @critical;
+    font-weight: bold;
+}
+
+/* ============================================
+   System Tray
+   ============================================ */
+#tray > .passive {
+    -gtk-icon-effect: dim;
+}
+
+#tray > .needs-attention {
+    -gtk-icon-effect: highlight;
+    background-color: @critical;
+}
+
+/* ============================================
+   Tooltips
+   ============================================ */
+tooltip {
+    background-color: @background-alt;
+    border: 1px solid rgba(167, 192, 128, 0.3);
+}
+
+tooltip label {
+    color: @foreground;
 }
