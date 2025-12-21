@@ -1,11 +1,11 @@
 /* ============================================
    Color & Spacing Variables
    ============================================ */
-@define-color foreground #d3c6aa;
+@define-color foreground #cedaeb;
 @define-color foreground-inactive #859289;
-@define-color background rgba(45, 53, 59, 0.95);
-@define-color background-alt rgba(80, 90, 96, 0.9);
-@define-color accent #a7c080;
+@define-color background rgba(54, 40, 61, 0.9);
+@define-color background-alt #60486d;
+@define-color accent #AB8CAE;
 @define-color warning #dbbc7f;
 @define-color critical #e67e80;
 
@@ -34,17 +34,17 @@
    ============================================ */
 #workspaces {
     padding: 0px 4px;
-    margin: 4px 0;
+    margin: 4px 0px;
 }
 
 #workspaces button {
     padding: 0 8px;
-    margin: 1px 4px;
+    margin: 3px 3px;
     color: @foreground-inactive;
 }
 
 #workspaces button:hover {
-    background-color: rgba(167, 192, 128, 0.15);
+    background-color: @background-alt;
     color: @foreground;
 }
 
@@ -72,7 +72,7 @@
 #submap {
     background-color: @background-alt;
     padding: 0 10px;
-    margin: 6px 4px;
+    margin: 8px 5px;
 }
 
 /* Hover effects for interactive groups */
@@ -80,14 +80,14 @@
 #bat:hover,
 #net:hover,
 #wireplumber:hover {
-    background-color: rgba(167, 192, 128, 0.2);
+    background-color: @background;
 }
 
 /* ============================================
    Clock - Special styling
    ============================================ */
 #clock {
-    background: linear-gradient(135deg, @background-alt 0%, rgba(167, 192, 128, 0.15) 100%);
+    /* background: linear-gradient(135deg, @background-alt 0%, rgba(167, 192, 128, 0.15) 100%); */
     font-weight: bold;
     color: @accent;
     padding: 0 12px;
