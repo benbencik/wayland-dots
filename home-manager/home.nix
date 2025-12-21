@@ -19,6 +19,7 @@
   # The home.packages option allows you to install Nix packages into your
   # environment.
   home.packages = [
+    pkgs.conky
     # # Adds the 'hello' command to your environment. It prints a friendly
     # # "Hello, world!" when run.
     # pkgs.hello
@@ -80,6 +81,11 @@
     vim-markdown
   ];
 
+  programs.direnv = {
+    enable = true;
+    nix-direnv.enable = true; # A plugin that makes it faster and caches builds
+  };
+
   programs.zsh = {
     enable = true;
     
@@ -101,6 +107,8 @@
       wa = "watson aggregate | tail";
       wr = "watson restart";
       duck = "~/.config/home-manager/hello-duck.sh";
+      tlp-notebook="sudo tlp fullcharge BAT0";
+      tlp-desktop="sudo tlp setcharge 50 80 BAT0";
     };
 
     oh-my-zsh = {
