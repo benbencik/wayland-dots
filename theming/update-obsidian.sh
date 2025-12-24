@@ -19,55 +19,83 @@ if [ ! -f "$OBSIDIAN_THEME" ]; then
     exit 1
 fi
 
+# Function to lighten a hex color
+lighten_color() {
+    hex=${1#\#}
+    r=$(printf '%d' 0x${hex:0:2})
+    g=$(printf '%d' 0x${hex:2:2})
+    b=$(printf '%d' 0x${hex:4:2})
+    
+    r=$((r + $2 > 255 ? 255 : r + $2))
+    g=$((g + $2 > 255 ? 255 : g + $2))
+    b=$((b + $2 > 255 ? 255 : b + $2))
+    
+    printf "#%02x%02x%02x" $r $g $b
+}
+
 # Read colors from the theme file
 foreground=$(grep '^foreground' "$THEME_FILE" | awk '{print $2}')
 background=$(grep '^background' "$THEME_FILE" | awk '{print $2}')
+selection_foreground=$(grep '^selection_foreground' "$THEME_FILE" | awk '{print $2}')
 selection_background=$(grep '^selection_background' "$THEME_FILE" | awk '{print $2}')
 color0=$(grep '^color0' "$THEME_FILE" | awk '{print $2}')
-color8=$(grep '^color8' "$THEME_FILE" | awk '{print $2}')
-color2=$(grep '^color2' "$THEME_FILE" | awk '{print $2}')   # green - for bold
-color6=$(grep '^color6' "$THEME_FILE" | awk '{print $2}')   # cyan - for italic
-color15=$(grep '^color15' "$THEME_FILE" | awk '{print $2}') # bright white - for borders
+color2=$(grep '^color2' "$THEME_FILE" | awk '{print $2}')  # accent
+color3=$(grep '^color3' "$THEME_FILE" | awk '{print $2}')  # h3, bold
+color4=$(grep '^color4' "$THEME_FILE" | awk '{print $2}')  # italic
+color5=$(grep '^color5' "$THEME_FILE" | awk '{print $2}')  # h2
 
-# Update the Custom theme CSS file directly
-# Update dark theme variables in the :root section
+bg5_light=$(lighten_color "$background" 20)
+
+# Update CSS variables in :root and theme sections
 sed -i "s|--bg-dark:.*|--bg-dark:        $background;|" "$OBSIDIAN_THEME"
 sed -i "s|--fg-dark:.*|--fg-dark:        $foreground;|" "$OBSIDIAN_THEME"
 sed -i "s|--bg0-dark:.*|--bg0-dark:       $color0;|" "$OBSIDIAN_THEME"
-sed -i "s|--bg5-dark:.*|--bg5-dark:       $color15;|" "$OBSIDIAN_THEME"
-sed -i "s|--text-selection:.*|--text-selection:             $selection_background;|" "$OBSIDIAN_THEME"
+sed -i "s|--bg5-dark:.*|--bg5-dark:       $bg5_light;|" "$OBSIDIAN_THEME"
 
-# Add custom CSS for bold and italic styling at the end of the file
-# First, remove any existing custom styling section
+# Update accent and selection colors in theme sections
+sed -i "/\.theme-dark/,/^}/s|--text-selection:.*|--text-selection:             $selection_background;|" "$OBSIDIAN_THEME"
+sed -i "/\.theme-light/,/^}/s|--text-selection:.*|--text-selection:             $selection_background;|" "$OBSIDIAN_THEME"
+sed -i "/\.theme-dark/,/^}/s|--interactive-accent:.*|--interactive-accent:         $color2;|" "$OBSIDIAN_THEME"
+sed -i "/\.theme-dark/,/^}/s|--text-accent:.*|--text-accent:                $color2;|" "$OBSIDIAN_THEME"
+
+# Remove old auto-generated section
 sed -i '/\/\* AUTO-GENERATED: Custom text styling \*\//,/\/\* END AUTO-GENERATED \*\//d' "$OBSIDIAN_THEME"
 
-# Then append new styling
+# Append new styling
 cat >> "$OBSIDIAN_THEME" << EOF
 
 /* AUTO-GENERATED: Custom text styling */
+.theme-dark ::selection,
+.theme-light ::selection {
+    background-color: var(--text-selection) !important;
+    color: $selection_foreground !important;
+}
+
+.suggestion-item.is-selected {
+    background-color: $selection_background !important;
+    color: $selection_foreground !important;
+}
+
 strong, .cm-strong {
-    color: $color2 !important;
+    color: $color3 !important;
 }
 
 em, .cm-em {
-    color: $color6 !important;
+    color: $color4 !important;
 }
 
-.workspace-leaf-content[data-type="markdown"] .view-content {
-    border-color: $color15 !important;
+h2, .cm-header-2 {
+    color: $color5 !important;
 }
 
-.markdown-source-view.mod-cm6 .cm-line {
-    border-color: $color15 !important;
+h3, .cm-header-3 {
+    color: $color3 !important;
+}
+
+h4, .cm-header-4 {
+    color: $color2 !important;
 }
 /* END AUTO-GENERATED */
 EOF
 
 echo "Obsidian Custom theme updated successfully."
-echo "The following colors were updated:"
-echo "  Background: $background"
-echo "  Foreground: $foreground"
-echo "  Selection: $selection_background"
-echo "  Border: $color15 (brighter)"
-echo "  Bold text: $color2 (green)"
-echo "  Italic text: $color6 (cyan)"
