@@ -17,17 +17,18 @@ hex_to_rgba() {
 # Read colors from the theme file
 foreground=$(grep '^foreground' "$THEME_FILE" | awk '{print $2}')
 background_hex=$(grep '^background' "$THEME_FILE" | awk '{print $2}')
-selection_background_hex=$(grep '^selection_background' "$THEME_FILE" | awk '{print $2}')
-color2=$(grep '^color2' "$THEME_FILE" | awk '{print $2}')  # green - accent
+foreground_inactive=$(grep '^inactive_tab_background' "$THEME_FILE" | awk '{print $2}' | cut -c1-7)
+selection_background=$(grep '^selection_background' "$THEME_FILE" | awk '{print $2}')
+accent=$(grep '^color3' "$THEME_FILE" | awk '{print $2}')
 
 # Convert hex colors to rgba
-background=$(hex_to_rgba "$background_hex" 0.95)
-background_alt="$selection_background_hex"
+background=$(hex_to_rgba "$background_hex" 0.85)
 
 # Update the style.css file
 sed -i "s/@define-color foreground .*/@define-color foreground $foreground;/" "$STYLE_FILE"
-sed -i "s/@define-color background .*/@define-color background $background;/" "$STYLE_FILE"
-sed -i "s/@define-color background-alt .*/@define-color background-alt $background_alt;/" "$STYLE_FILE"
-sed -i "s/@define-color accent .*/@define-color accent $color2;/" "$STYLE_FILE"
+sed -i "s/@define-color foreground-inactive .*/@define-color foreground-inactive $foreground_inactive;/" "$STYLE_FILE"
+sed -i "s|@define-color background .*|@define-color background $background;|" "$STYLE_FILE"
+sed -i "s/@define-color background-alt .*/@define-color background-alt $selection_background;/" "$STYLE_FILE"
+sed -i "s/@define-color accent .*/@define-color accent $accent;/" "$STYLE_FILE"
 
 echo "Waybar style updated with current theme colors."
