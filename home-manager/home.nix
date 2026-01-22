@@ -16,41 +16,49 @@
   # release notes.
   home.stateVersion = "23.11"; # Please read the comment before changing.
 
-  # The home.packages option allows you to install Nix packages into your
-  # environment.
-  home.packages = [
-    pkgs.conky
-    # # Adds the 'hello' command to your environment. It prints a friendly
-    # # "Hello, world!" when run.
-    # pkgs.hello
+  # User-specific packages
+  # System-wide packages should go in /etc/nixos/configuration.nix
+  home.packages = with pkgs; [
+    # System monitoring
+    conky
+    
+    # Media tools
+    yt-dlp
+    termusic
+    
+    # File management
+    yazi
+    
+    # Shell prompt
+    spaceship-prompt
 
-    # # It is sometimes useful to fine-tune packages, for example, by applying
-    # # overrides. You can do that directly here, just don't forget the
-    # # parentheses. Maybe you want to install Nerd Fonts with a limited number of
-    # # fonts?
-    # (pkgs.nerdfonts.override { fonts = [ "FantasqueSansMono" ]; })
+    typst
+    typstyle  # formater for typst
 
-    # # You can also create simple shell scripts directly inside your
-    # # configuration. For example, this adds a command 'my-hello' to your
-    # # environment:
-    # (pkgs.writeShellScriptBin "my-hello" ''
-    #   echo "Hello, ${config.home.username}!"
-    # '')
+    porsmo
+
+    wiremix
+    gemini-cli
   ];
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
   home.file = {
-    # # Building this configuration will create a copy of 'dotfiles/screenrc' in
-    # # the Nix store. Activating the configuration will then make '~/.screenrc' a
-    # # symlink to the Nix store copy.
-    # ".screenrc".source = dotfiles/screenrc;
-
-    # # You can also set the file content immediately.
-    # ".gradle/gradle.properties".text = ''
-    #   org.gradle.console=verbose
-    #   org.gradle.daemon.idletimeout=3600000
-    # '';
+    # # Wayland/Hyprland configurations
+    # ".config/hypr".source = /home/benb/wayland-dots/hypr;
+    # ".config/waybar".source = /home/benb/wayland-dots/waybar;
+    # ".config/mako".source = /home/benb/wayland-dots/mako;
+    
+    # # Application configurations
+    # ".config/conky".source = /home/benb/wayland-dots/conky;
+    # ".config/obsidian".source = /home/benb/wayland-dots/obsidian;
+    # ".config/vscode".source = /home/benb/wayland-dots/vscode;
+    
+    # # Theming scripts
+    # ".config/theming".source = /home/benb/wayland-dots/theming;
+    
+    # # Wallpapers
+    # ".config/wallpapers".source = /home/benb/wayland-dots/wallpapers;
   };
 
   # Home Manager can also manage your environment variables through
@@ -70,75 +78,106 @@
   #  /etc/profiles/per-user/benb/etc/profile.d/hm-session-vars.sh
   #
   home.sessionVariables = {
-    # EDITOR = "emacs";
+    EDITOR = "nvim";
+    GTK_THEME = "Everforest-Dark-Medium";
   };
 
-  # Let Home Manager install and manage itself.
+  # Let Home Manager install and manage itself
   programs.home-manager.enable = true;
 
-  programs.neovim.enable = true;
-  programs.neovim.plugins = with pkgs.vimPlugins; [
-    vim-markdown
-  ];
+  # ============================================
+  # Development Tools
+  # ============================================
+  
+  # programs.neovim = {
+  #   enable = true;
+  #   plugins = with pkgs.vimPlugins; [
+  #     vim-markdown
+  #   ];
+  #   viAlias = true;
+  #   vimAlias = true;
+  # };
 
   programs.direnv = {
     enable = true;
-    nix-direnv.enable = true; # A plugin that makes it faster and caches builds
+    nix-direnv.enable = true;
   };
 
+  # ============================================
+  # Shell Configuration
+  # ============================================
+  
   programs.zsh = {
     enable = true;
+    enableCompletion = true;
+    autosuggestion.enable = true;
+    syntaxHighlighting.enable = true;
     
-    # initExtra = ''$HOME/.config/home-manager/hello-duck.sh'';
-    # export PATH="$HOME/.cargo/bin:$HOME/.foundry/bin:$HOME/.nix-profile/bin:$PATH"
     initExtra = ''
+      # Custom PATH
       export PATH="$HOME/.cargo/bin:$HOME/.local/bin:$HOME/.foundry/bin:$PATH"
-      eval "$(starship init zsh)"
     '';
 
     shellAliases = {
+      # File operations
       ll = "ls -l";
+      
+      # NixOS management
       nix-conf = "sudo nano /etc/nixos/configuration.nix";
       nix-update = "sudo nixos-rebuild switch";
       nix-search = "nix search nixpkgs";
       hm-update = "home-manager switch";
+      
+      # Watson time tracking
       ws = "watson stop";
       we = "watson edit";
       wa = "watson aggregate | tail";
       wr = "watson restart";
+      
+      # Power management
+      tlp-notebook = "sudo tlp fullcharge BAT0";
+      tlp-desktop = "sudo tlp setcharge 50 80 BAT0";
+      
+      # Custom scripts
       duck = "~/.config/home-manager/hello-duck.sh";
-      tlp-notebook="sudo tlp fullcharge BAT0";
-      tlp-desktop="sudo tlp setcharge 50 80 BAT0";
     };
 
     oh-my-zsh = {
       enable = true;
-      theme = "robbyrussell";
-      custom = "$HOME/.oh-my-zsh/custom";
-      plugins = [ "git" "zsh-autosuggestions" "zsh-syntax-highlighting" ];
+      theme = "spaceship";
+      custom = "${pkgs.spaceship-prompt}/share/zsh";
+      plugins = [ "git" ];
     };
 
-    history.size = 10000;
+    history = {
+      size = 10000;
+      path = "$HOME/.zsh_history";
+    };
   };
+
+  # ============================================
+  # Version Control
+  # ============================================
 
   programs.git = {
     enable = true;
-    userName = "benbencik";
-    userEmail = "bencik42@gmail.com";
-    extraConfig = {
+    settings = {
+      user.name = "benbencik";
+      user.email = "bencik42@gmail.com";
       pull.rebase = true;
       color.ui = "auto";
+      init.defaultBranch = "main";
     };
   };
+
+  # ============================================
+  # GTK Theme
+  # ============================================
 
   gtk = {
     enable = true;
     theme = {
       name = "Everforest-Dark-Medium";
     };
-  };
-
-  home.sessionVariables = {
-    GTK_THEME = "Everforest-Dark-Medium";
   };
 }
