@@ -1,6 +1,9 @@
 { config, pkgs, ... }:
 
 {
+  # Allow unfree packages
+  nixpkgs.config.allowUnfree = true;
+
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
   home.username = "benb";
@@ -19,25 +22,80 @@
   # User-specific packages
   # System-wide packages should go in /etc/nixos/configuration.nix
   home.packages = with pkgs; [
-    # System monitoring
-    conky
+    # Development Tools
+    nodejs
+    python3
+    rustup
+    gcc
+    gnumake
+    libclang
+    autoconf
+    valgrind
+    lldb
+    pkg-config
+    devenv
+    pnpm
     
-    # Media tools
+    # CLI Tools
+    htop
+    tree
+    wget
+    vim
+    jq
+    lsof
+    eza
+    bat
+    ripgrep
+    fd
+    fzf
+    
+    # Shell
+    spaceship-prompt
+    starship
+    
+    # Media & Productivity
     yt-dlp
     termusic
+    obs-studio
+    gimp
     
-    # File management
+    # File Management
     yazi
+    pcmanfm
     
-    # Shell prompt
-    spaceship-prompt
-
-    typst
-    typstyle  # formater for typst
-
-    porsmo
-
+    # Wayland Tools
+    grim
+    slurp
+    wl-clipboard
+    wallust
+    conky
+    
+    # Audio
+    playerctl
     wiremix
+    pamixer
+    
+    # Browsers
+    brave
+    chromium
+    tor-browser
+    
+    # Communication
+    signal-desktop
+    weechat
+    
+    # Documents & Writing
+    obsidian
+    libreoffice
+    pandoc
+    typst
+    typstyle
+    
+    # Time Tracking
+    watson
+    porsmo
+    
+    # Other
     gemini-cli
   ];
 
@@ -77,8 +135,9 @@
   #
   #  /etc/profiles/per-user/benb/etc/profile.d/hm-session-vars.sh
   #
+
   home.sessionVariables = {
-    EDITOR = "nvim";
+    EDITOR = "vim";
     GTK_THEME = "Everforest-Dark-Medium";
   };
 
@@ -86,41 +145,60 @@
   programs.home-manager.enable = true;
 
   # ============================================
+  # Terminal
+  # ============================================
+
+  programs.kitty = {
+    enable = true;
+    themeFile = "Ayaka";
+    settings = {
+      editor = "vim";
+      confirm_os_window_close = 0;
+    };
+  };
+
+  # ============================================
   # Development Tools
   # ============================================
-  
-  # programs.neovim = {
-  #   enable = true;
-  #   plugins = with pkgs.vimPlugins; [
-  #     vim-markdown
-  #   ];
-  #   viAlias = true;
-  #   vimAlias = true;
-  # };
 
   programs.direnv = {
     enable = true;
     nix-direnv.enable = true;
   };
 
-  # ============================================
-  # Shell Configuration
-  # ============================================
-  
+  programs.fzf = {
+    enable = true;
+    enableZshIntegration = true;
+  };
   programs.zsh = {
     enable = true;
     enableCompletion = true;
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
     
-    initExtra = ''
+    initContent = ''
       # Custom PATH
       export PATH="$HOME/.cargo/bin:$HOME/.local/bin:$HOME/.foundry/bin:$PATH"
     '';
 
+    oh-my-zsh = {
+      enable = true;
+      theme = "spaceship";
+      custom = "${pkgs.spaceship-prompt}/share/zsh";
+      plugins = [ "git" ];
+    };
+
+    history = {
+      size = 10000;
+      path = "$HOME/.zsh_history";
+    };
+
     shellAliases = {
-      # File operations
-      ll = "ls -l";
+      # Modern CLI replacements
+      ls = "eza";
+      ll = "eza -l";
+      la = "eza -la";
+      cat = "bat";
       
       # NixOS management
       nix-conf = "sudo nano /etc/nixos/configuration.nix";
@@ -142,17 +220,6 @@
       duck = "~/.config/home-manager/hello-duck.sh";
     };
 
-    oh-my-zsh = {
-      enable = true;
-      theme = "spaceship";
-      custom = "${pkgs.spaceship-prompt}/share/zsh";
-      plugins = [ "git" ];
-    };
-
-    history = {
-      size = 10000;
-      path = "$HOME/.zsh_history";
-    };
   };
 
   # ============================================
