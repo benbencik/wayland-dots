@@ -1,11 +1,11 @@
 sort=-time
 layer=overlay
-background-color=#2d353b
-text-color=#d3c6aa
+background-color=#36283d
+text-color=#cedaeb
 width=300
 height=110
 border-size=2
-border-color=#a7c080
+border-color=#71ADE9
 border-radius=0
 icons=0
 ignore-timeout=1
@@ -15,10 +15,10 @@ margin=4,4,4,4
 anchor=top-right
 
 [urgency=low]
-border-color=#a7c080
+border-color=#71ADE9
 
 [urgency=normal]
-border-color=#a7c080
+border-color=#71ADE9
 
 [urgency=high]
-border-color=#e67e80
+border-color=#71ADE9
