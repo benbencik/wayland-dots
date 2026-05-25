@@ -14,4 +14,6 @@ for dir in "$WORKSPACE_DIR"/*/; do
     echo "Created symbolic link for $dir_name in ~/.config"
 done
 
+ln -sfn "$PWD/starship.toml" "$HOME/.config/starship.toml"
+
 echo "All directories in the workspace have been linked to ~/.config"
