@@ -25,7 +25,6 @@
     # Development Tools
     nodejs
     python3
-    rustup
     gcc
     gnumake
     libclang
@@ -35,7 +34,8 @@
     pkg-config
     devenv
     pnpm
-    
+    elan # somehow this is lean    
+
     # CLI Tools
     htop
     tree
@@ -45,9 +45,14 @@
     lsof
     eza
     bat
-    ripgrep
-    fd
     fzf
+    tldr
+    ripgrep # better grep
+    bottom # nice rust-based top
+    gh # github cli tool
+
+    gocryptfs
+    pinentry-all
     
     # Shell
     spaceship-prompt
@@ -62,13 +67,15 @@
     # File Management
     yazi
     pcmanfm
-    
+    ncdu # terminal disk space analyzer
+
     # Wayland Tools
     grim
     slurp
     wl-clipboard
     wallust
     conky
+    hypridle
     
     # Audio
     playerctl
@@ -82,7 +89,6 @@
     
     # Communication
     signal-desktop
-    weechat
     
     # Documents & Writing
     obsidian
@@ -97,26 +103,19 @@
     
     # Other
     gemini-cli
+    github-copilot-cli
+    claude-code
+    unzip
+    yt-dlp
   ];
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
   home.file = {
-    # # Wayland/Hyprland configurations
-    # ".config/hypr".source = /home/benb/wayland-dots/hypr;
-    # ".config/waybar".source = /home/benb/wayland-dots/waybar;
-    # ".config/mako".source = /home/benb/wayland-dots/mako;
-    
-    # # Application configurations
-    # ".config/conky".source = /home/benb/wayland-dots/conky;
-    # ".config/obsidian".source = /home/benb/wayland-dots/obsidian;
-    # ".config/vscode".source = /home/benb/wayland-dots/vscode;
-    
-    # # Theming scripts
-    # ".config/theming".source = /home/benb/wayland-dots/theming;
-    
-    # # Wallpapers
-    # ".config/wallpapers".source = /home/benb/wayland-dots/wallpapers;
+    ".config/hypr".source = config.lib.file.mkOutOfStoreSymlink /home/benb/wayland-dots/hypr;
+    ".config/waybar".source = config.lib.file.mkOutOfStoreSymlink /home/benb/wayland-dots/waybar;
+    ".config/mako".source = config.lib.file.mkOutOfStoreSymlink /home/benb/wayland-dots/mako;
+    ".config/conky".source = config.lib.file.mkOutOfStoreSymlink /home/benb/wayland-dots/conky;
   };
 
   # Home Manager can also manage your environment variables through
@@ -164,12 +163,24 @@
   programs.direnv = {
     enable = true;
     nix-direnv.enable = true;
+    enableZshIntegration = true;
+    config = {
+      whitelist = {
+        prefix = ["~/Code"];
+      };
+    };
   };
 
   programs.fzf = {
     enable = true;
     enableZshIntegration = true;
   };
+
+  programs.starship = {
+    enable = true;
+    enableZshIntegration = true;
+  };
+
   programs.zsh = {
     enable = true;
     enableCompletion = true;
@@ -177,14 +188,19 @@
     syntaxHighlighting.enable = true;
     
     initContent = ''
-      # Custom PATH
-      export PATH="$HOME/.cargo/bin:$HOME/.local/bin:$HOME/.foundry/bin:$PATH"
+      # Re-trigger direnv when VSCode opens a terminal in a direnv-managed folder
+      if [[ -f .envrc ]]; then
+        eval "$(direnv export zsh)"
+      fi
+
+      # Sort completions by last modified (newest first)
+      zstyle ':completion:*' file-sort modification
     '';
 
     oh-my-zsh = {
       enable = true;
-      theme = "spaceship";
-      custom = "${pkgs.spaceship-prompt}/share/zsh";
+      # theme = "spaceship";
+      # custom = "${pkgs.spaceship-prompt}/share/zsh";
       plugins = [ "git" ];
     };
 
@@ -214,7 +230,7 @@
       
       # Power management
       tlp-notebook = "sudo tlp fullcharge BAT0";
-      tlp-desktop = "sudo tlp setcharge 50 80 BAT0";
+      tlp-desktop = "sudo tlp setcharge 30 80 BAT0";
       
       # Custom scripts
       duck = "~/.config/home-manager/hello-duck.sh";
