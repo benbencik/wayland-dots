@@ -102,11 +102,13 @@
     porsmo
     
     # Other
+    linuxPackages.cpupower
     gemini-cli
     github-copilot-cli
     claude-code
     unzip
     yt-dlp
+    nym
   ];
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
@@ -262,5 +264,6 @@
     theme = {
       name = "Everforest-Dark-Medium";
     };
+    gtk4.theme = null;
   };
 }
