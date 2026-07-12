@@ -1,20 +1,22 @@
 /* ============================================
    Color & Spacing Variables
    ============================================ */
-@define-color foreground #cedaeb;
-@define-color foreground-inactive #E59DB1;
-@define-color background rgba(54, 40, 61, 0.85);
-@define-color background-alt #cedaeb;
-@define-color accent #E59DB1;
-@define-color warning #dbbc7f;
+@define-color foreground #d4be98;
+@define-color foreground-inactive #202020;
+@define-color background rgba(40, 40, 40, 0.9);
+@define-color background-alt #d4be98;
+@define-color accent #e78a4e;
+@define-color accent-green #a9b665;
+@define-color accent-blue #7daea3;
+@define-color warning #d8a657;
 @define-color critical #e67e80;
 
 /* ============================================
    Global Settings
    ============================================ */
 * {
-    font-family: Hack Nerd Font;
-    font-size: 12px;
+    font-family: IosevkaTerm Nerd Font;
+    font-size: 14px;
     padding: 0;
     margin: 0;
     min-height: 0;
@@ -50,7 +52,7 @@
     background-color: transparent;
     color: @accent;
     font-weight: bold;
-    box-shadow: inset 0 -1px 0 @accent;
+    box-shadow: inset 0 -2px 0 @accent;
 }
 
 #workspaces button.urgent {
@@ -71,17 +73,14 @@
     background-color: transparent;
     color: @foreground;
     padding: 0px 10px;
-    margin: 0px 5px;
-    box-shadow: inset 0 -1px 0 @accent;
+    margin: 0px 6px;
+    box-shadow: inset 0 -2px 0 @accent;
 }
 
-/* Hover effects for interactive groups */
-#usage:hover,
-#bat:hover,
-#net:hover,
-#wireplumber:hover {
-    background-color: transparent;
-}
+#usage, #wireplumber { box-shadow: inset 0 -2px 0 @accent-green; }
+#bat, #net           { box-shadow: inset 0 -2px 0 @accent-blue; }
+#clock, #submap      { box-shadow: inset 0 -2px 0 @accent; }
+
 
 /* ============================================
    Clock - Special styling
@@ -89,9 +88,7 @@
 #clock {
     /* background: linear-gradient(135deg, @background-alt 0%, rgba(167, 192, 128, 0.15) 100%); */
     font-weight: bold;
-    color: @accent;
-    padding: 0px 6px;
-    /* border: 1px solid rgba(167, 192, 128, 0.2); */
+    /* color: @accent; */
 }
 
 /* ============================================
@@ -143,7 +140,7 @@
 }
 
 #network.wifi {
-    color: @accent;
+    color: @foreground;
 }
 
 #bluetooth.connected {
