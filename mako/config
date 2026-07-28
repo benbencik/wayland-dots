@@ -12,7 +12,7 @@ icons=0
 ignore-timeout=1
 max-icon-size=64
 font=IosevkaTerm Nerd Font 12
-margin=4,4,4,4
+margin=5,5,0,0
 anchor=top-right
 
 [urgency=low]
