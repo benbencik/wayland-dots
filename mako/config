@@ -1,24 +1,46 @@
 sort=-time
 layer=overlay
-background-color=#36283d
-text-color=#cedaeb
+background-color=#282828
+text-color=#d4be98
 width=300
 height=110
 border-size=2
-border-color=#71ADE9
+border-color=#a9b665
 border-radius=0
+progress-color=over #a9b66533
 icons=0
 ignore-timeout=1
 max-icon-size=64
-font=monospace 12
+font=IosevkaTerm Nerd Font 12
 margin=4,4,4,4
 anchor=top-right
 
 [urgency=low]
-border-color=#71ADE9
+border-color=#a9b665
 
 [urgency=normal]
-border-color=#71ADE9
+border-color=#a9b665
 
 [urgency=high]
-border-color=#71ADE9
+border-color=#a9b665
+
+# Volume / brightness OSD bars
+[category=osd]
+default-timeout=1200
+history=0
+
+# Volume boost zone (>100%) — orange bar + border
+[category=osd-boost]
+default-timeout=1200
+history=0
+border-color=#e78a4e
+
+# Low-battery warning (<=20%)
+[category=battery-warn]
+default-timeout=0
+border-color=#e78a4e
+
+# Critical-battery warning (<=10%)
+[category=battery-crit]
+default-timeout=0
+border-color=#ea6962
