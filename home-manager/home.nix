@@ -35,6 +35,8 @@
     devenv
     pnpm
     elan # somehow this is lean    
+    perf
+    samply
 
     # CLI Tools
     htop
@@ -49,7 +51,9 @@
     tldr
     ripgrep # better grep
     bottom # nice rust-based top
+    btop
     gh # github cli tool
+    bluetuith
 
     gocryptfs
     pinentry-all
@@ -151,10 +155,13 @@
 
   programs.kitty = {
     enable = true;
-    themeFile = "Ayaka";
     settings = {
       editor = "vim";
       confirm_os_window_close = 0;
+      # Fira Code Nerd Font
+      # Hack Nerd Font
+      font_family = "IosevkaTerm Nerd Font";
+      font_size = "12.0";
     };
   };
 
@@ -212,11 +219,11 @@
     };
 
     shellAliases = {
-      # Modern CLI replacements
+      # CLI replacements
       ls = "eza";
       ll = "eza -l";
       la = "eza -la";
-      cat = "bat";
+      ptn = "python";
       
       # NixOS management
       nix-conf = "sudo nano /etc/nixos/configuration.nix";
