@@ -20,6 +20,8 @@ background_hex=$(grep '^background' "$THEME_FILE" | awk '{print $2}')
 foreground_inactive=$(grep '^inactive_tab_background' "$THEME_FILE" | awk '{print $2}' | cut -c1-7)
 selection_background=$(grep '^selection_background' "$THEME_FILE" | awk '{print $2}')
 accent=$(grep '^color3' "$THEME_FILE" | awk '{print $2}')
+accent_green=$(grep '^color2' "$THEME_FILE" | awk '{print $2}')
+accent_blue=$(grep '^color4' "$THEME_FILE" | awk '{print $2}')
 
 # Convert hex colors to rgba
 background=$(hex_to_rgba "$background_hex" 0.85)
@@ -30,5 +32,7 @@ sed -i "s/@define-color foreground-inactive .*/@define-color foreground-inactive
 sed -i "s|@define-color background .*|@define-color background $background;|" "$STYLE_FILE"
 sed -i "s/@define-color background-alt .*/@define-color background-alt $selection_background;/" "$STYLE_FILE"
 sed -i "s/@define-color accent .*/@define-color accent $accent;/" "$STYLE_FILE"
+sed -i "s/@define-color accent-green .*/@define-color accent-green $accent_green;/" "$STYLE_FILE"
+sed -i "s/@define-color accent-blue .*/@define-color accent-blue $accent_blue;/" "$STYLE_FILE"
 
 echo "Waybar style updated with current theme colors."

@@ -3,7 +3,7 @@
    ============================================ */
 @define-color foreground #d4be98;
 @define-color foreground-inactive #202020;
-@define-color background rgba(40, 40, 40, 0.9);
+@define-color background rgba(40, 40, 40, 0.85);
 @define-color background-alt #d4be98;
 @define-color accent #e78a4e;
 @define-color accent-green #a9b665;
