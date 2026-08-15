@@ -95,6 +95,7 @@ def main() -> int:
     parser.add_argument("--speed", action="store_true", help="measure download throughput (slow)")
     parser.add_argument("--json", action="store_true", help="output all fields as JSON")
     field_group = parser.add_mutually_exclusive_group()
+    field_group.add_argument("--status", action="store_true", help=f"print Connected/Disconnected only ({FIELD_HELP})")
     field_group.add_argument("--entry", action="store_true", help=f"print entry gateway only ({FIELD_HELP})")
     field_group.add_argument("--exit", action="store_true", help=f"print exit gateway only ({FIELD_HELP})")
     field_group.add_argument("--ip", action="store_true", help=f"print confirmed exit IP only ({FIELD_HELP})")
@@ -105,10 +106,18 @@ def main() -> int:
     if not status["connected"]:
         if args.json:
             print(json.dumps(status))
+        elif args.status:
+            print("Disconnected")
+        elif args.entry or args.exit:
+            print("-")
         else:
             print("Not connected. Current state:")
             print(f"  {status['raw']}")
         return 1
+
+    if args.status:
+        print("Connected")
+        return 0
 
     # single-field modes skip the slow probes (latency/ip) unless that field was asked for
     if args.entry:
