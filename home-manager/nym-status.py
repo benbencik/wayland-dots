@@ -7,6 +7,9 @@ import json
 import re
 import subprocess
 import sys
+from pathlib import Path
+
+CACHE_FILE = Path(__file__).resolve().parent / ".nym-status-gateways-cache.json"
 
 
 def run(cmd: list[str], timeout: float | None = None) -> str:
@@ -16,6 +19,48 @@ def run(cmd: list[str], timeout: float | None = None) -> str:
         ).stdout.strip()
     except (subprocess.TimeoutExpired, FileNotFoundError):
         return ""
+
+
+def resolve_gateways(entry_pubkey: str, exit_pubkey: str) -> dict:
+    """Resolve pubkeys to gateway name/location/quality, caching by pubkey pair.
+
+    ``nym-vpnc gateway list wg`` fetches ~500 gateways over the network, but
+    entry/exit only change on reconnect — so skip it entirely when the last
+    resolved pubkeys still match the current connection.
+    """
+    try:
+        cached = json.loads(CACHE_FILE.read_text())
+    except (OSError, json.JSONDecodeError):
+        cached = {}
+
+    if cached.get("entry_pubkey") == entry_pubkey and cached.get("exit_pubkey") == exit_pubkey:
+        return cached
+
+    gateways = run(["nym-vpnc", "gateway", "list", "wg"])
+    entry_line = next((l for l in gateways.splitlines() if entry_pubkey and entry_pubkey in l), "")
+    exit_line = next((l for l in gateways.splitlines() if exit_pubkey and exit_pubkey in l), "")
+
+    def field(line: str, n: int) -> str:
+        parts = line.split("|")
+        return parts[n].strip() if len(parts) > n else ""
+
+    resolved = {
+        "entry_pubkey": entry_pubkey,
+        "exit_pubkey": exit_pubkey,
+        "entry_name": field(entry_line, 1) or "unknown",
+        "entry_loc": field(entry_line, 2) or "unknown",
+        "entry_quality": field(entry_line, 3) or "?",
+        "exit_name": field(exit_line, 1) or "unknown",
+        "exit_loc": field(exit_line, 2) or "unknown",
+        "exit_quality": field(exit_line, 3) or "?",
+    }
+
+    try:
+        CACHE_FILE.write_text(json.dumps(resolved))
+    except OSError:
+        pass
+
+    return resolved
 
 
 def get_status() -> dict:
@@ -29,22 +74,16 @@ def get_status() -> dict:
     m = re.search(r"→ ([0-9.]+):", status)
     exit_ip = m.group(1) if m else None
 
-    gateways = run(["nym-vpnc", "gateway", "list", "wg"])
-    entry_line = next((l for l in gateways.splitlines() if entry_pubkey and entry_pubkey in l), "")
-    exit_line = next((l for l in gateways.splitlines() if exit_pubkey and exit_pubkey in l), "")
-
-    def field(line: str, n: int) -> str:
-        parts = line.split("|")
-        return parts[n].strip() if len(parts) > n else ""
+    resolved = resolve_gateways(entry_pubkey, exit_pubkey)
 
     return {
         "connected": True,
-        "entry_name": field(entry_line, 1) or "unknown",
-        "entry_loc": field(entry_line, 2) or "unknown",
-        "entry_quality": field(entry_line, 3) or "?",
-        "exit_name": field(exit_line, 1) or "unknown",
-        "exit_loc": field(exit_line, 2) or "unknown",
-        "exit_quality": field(exit_line, 3) or "?",
+        "entry_name": resolved["entry_name"],
+        "entry_loc": resolved["entry_loc"],
+        "entry_quality": resolved["entry_quality"],
+        "exit_name": resolved["exit_name"],
+        "exit_loc": resolved["exit_loc"],
+        "exit_quality": resolved["exit_quality"],
         "exit_ip": exit_ip,
     }
 
