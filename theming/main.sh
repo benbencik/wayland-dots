@@ -12,6 +12,7 @@ echo "Applying theme from: $THEME_FILE"
 
 # Execute all update scripts
 "$HOME/.config/theming/update-hyprland.sh" "$THEME_FILE"
+"$HOME/.config/theming/update-hyprlock.sh" "$THEME_FILE"
 "$HOME/.config/theming/update-waybar.sh" "$THEME_FILE"
 "$HOME/.config/theming/update-mako.sh" "$THEME_FILE"
 "$HOME/.config/theming/update-conky.sh" "$THEME_FILE"
