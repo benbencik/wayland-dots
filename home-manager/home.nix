@@ -107,12 +107,16 @@
     
     # Other
     linuxPackages.cpupower
-    gemini-cli
     github-copilot-cli
     claude-code
     unzip
     yt-dlp
     nym
+    # texliveFull
+    # inkscape # needed for latex svg package
+    cliphist # clipboard manager
+    wl-clipboard # also clipboard
+    fuzzel
   ];
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
@@ -122,6 +126,7 @@
     ".config/waybar".source = config.lib.file.mkOutOfStoreSymlink /home/benb/wayland-dots/waybar;
     ".config/mako".source = config.lib.file.mkOutOfStoreSymlink /home/benb/wayland-dots/mako;
     ".config/conky".source = config.lib.file.mkOutOfStoreSymlink /home/benb/wayland-dots/conky;
+    ".config/fuzzel".source = config.lib.file.mkOutOfStoreSymlink /home/benb/wayland-dots/fuzzel;
   };
 
   # Home Manager can also manage your environment variables through
@@ -243,6 +248,7 @@
       
       # Custom scripts
       duck = "~/.config/home-manager/hello-duck.sh";
+      nym-status = "~/.config/home-manager/nym-status.py";
     };
 
   };

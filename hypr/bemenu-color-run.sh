@@ -11,8 +11,16 @@ cursor=$(grep '^cursor' "$THEME_FILE" | awk '{print $2}')
 cursor_text_color=$(grep '^cursor_text_color' "$THEME_FILE" | awk '{print $2}')
 border_color=$(grep '^active_border_color' "$THEME_FILE" | awk '{print $2}')
 
+# Default: app launcher. With --dmenu: plain bemenu reading items from stdin
+cmd=bemenu-run
+
+if [ "$1" = "--dmenu" ]; then
+    cmd=bemenu
+    shift
+fi
+
 # Launch Bemenu with the extracted colors
-bemenu-run \
+"$cmd" "$@" \
     --nb "$background" \
     --nf "$foreground" \
     --hb "$selection_background" \
